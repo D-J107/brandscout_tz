@@ -21,13 +21,13 @@ func NewQuoteController() *QuoteController {
 func (c *QuoteController) Create(w http.ResponseWriter, r *http.Request) {
 	var req CreateQuoteRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		WriteErrorResponse(w, http.StatusBadRequest, "invalid request format body")
+		WriteErrorResponse(w, http.StatusBadRequest, "invalid request format, "+err.Error())
 		return
 	}
 
 	created, err := c.qs.Save(req.Author, req.Content)
 	if err != nil {
-		WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		WriteErrorResponse(w, http.StatusBadRequest, "failed to create, "+err.Error())
 		return
 	}
 
@@ -48,7 +48,7 @@ func (c *QuoteController) GetByFilter(w http.ResponseWriter, r *http.Request) {
 		var err error
 		quotes, err = c.qs.GetAll()
 		if err != nil {
-			WriteErrorResponse(w, http.StatusInternalServerError, err.Error())
+			WriteErrorResponse(w, http.StatusInternalServerError, "failed to get quotes, "+err.Error())
 			return
 		}
 	} else {
@@ -77,7 +77,7 @@ func (c *QuoteController) GetByFilter(w http.ResponseWriter, r *http.Request) {
 func (c *QuoteController) GetRandom(w http.ResponseWriter, r *http.Request) {
 	quote, err := c.qs.GetRandom()
 	if err != nil {
-		WriteErrorResponse(w, http.StatusInternalServerError, err.Error())
+		WriteErrorResponse(w, http.StatusNotFound, err.Error())
 		return
 	}
 

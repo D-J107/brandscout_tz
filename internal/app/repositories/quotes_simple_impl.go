@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"errors"
 	"quotes_api/internal/app/domain/models"
 )
 
@@ -26,7 +25,7 @@ func (r *quotesRepositorySimpleImplementation) GetAll() ([]*models.Quote, error)
 
 func (r *quotesRepositorySimpleImplementation) GetById(id int) (*models.Quote, error) {
 	if id <= 0 {
-		return nil, errors.New("error: invalid ID variable")
+		return nil, ErrInvalidId
 	}
 	for _, quote := range r.storage {
 		if quote.Id == id {
@@ -38,7 +37,7 @@ func (r *quotesRepositorySimpleImplementation) GetById(id int) (*models.Quote, e
 
 func (r *quotesRepositorySimpleImplementation) GetByAuthor(author string) ([]*models.Quote, error) {
 	if author == "" {
-		return nil, errors.New("error: provided author name empty")
+		return nil, ErrEmptyAuthor
 	}
 	authorQuotes := make([]*models.Quote, 0)
 	for _, quote := range r.storage {
@@ -51,7 +50,7 @@ func (r *quotesRepositorySimpleImplementation) GetByAuthor(author string) ([]*mo
 
 func (r *quotesRepositorySimpleImplementation) Delete(id int) error {
 	if id <= 0 {
-		return errors.New("error: invalid ID variable")
+		return ErrInvalidId
 	}
 	for i := range r.storage {
 		if r.storage[i].Id == id {

@@ -1,6 +1,9 @@
 package repositories
 
-import "quotes_api/internal/app/domain/models"
+import (
+	"errors"
+	"quotes_api/internal/app/domain/models"
+)
 
 type QuotesRepository interface {
 	Save(author, content string) (*models.Quote, error)
@@ -13,3 +16,8 @@ type QuotesRepository interface {
 func NewQuotesRepository() QuotesRepository {
 	return &quotesRepositorySimpleImplementation{storage: make([]*models.Quote, 0)}
 }
+
+var (
+	ErrInvalidId   = errors.New("invalid ID")
+	ErrEmptyAuthor = errors.New("author cannot be empty")
+)
