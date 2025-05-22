@@ -60,6 +60,7 @@ git clone https://github.com/D-J107/brandscout_tz.git
 ```bash
 docker compose up
 ```
+Приложение станет доступно по порту :8080
 
 ---
 
