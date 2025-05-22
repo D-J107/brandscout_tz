@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: Quotes API
+  description: API for managing inspirational quotes
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /quotes:
+    post:
+      tags:
+        - Quotes
+      summary: Create a new quote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteRequest'
+      responses:
+        '201':
+          description: Quote created successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      tags:
+        - Quotes
+      summary: Get quotes list
+      parameters:
+        - name: author
+          in: query
+          schema:
+            type: string
+          description: Filter quotes by author
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotesResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /quotes/random:
+    get:
+      tags:
+        - Quotes
+      summary: Get a random quote
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quote'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /quotes/{id}:
+    delete:
+      tags:
+        - Quotes
+      summary: Delete a quote by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the quote to delete
+      responses:
+        '200':
+          description: Quote deleted successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    QuoteRequest:
+      type: object
+      required:
+        - author
+        - quote
+      properties:
+        author:
+          type: string
+          example: Confucius
+        quote:
+          type: string
+          example: Life is simple, but we insist on making it complicated.
+
+    Quote:
+      type: object
+      properties:
+        author:
+          type: string
+          example: Confucius
+        quote:
+          type: string
+          example: Life is simple, but we insist on making it complicated.
+
+    QuotesResponse:
+      type: object
+      properties:
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Error message describing the issue
+      required:
+        - error
