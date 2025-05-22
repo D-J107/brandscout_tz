@@ -52,7 +52,11 @@
 ---
 
 ## Запуск 
-* Через поднятие докер-контейнера:
+Склонируйте гит-репозиторий:
+```bash
+git clone https://github.com/D-J107/brandscout_tz.git
+```
+Запустите докер контейнер через compose:
 ```bash
 docker compose up
 ```
@@ -69,7 +73,7 @@ docker compose up
 ---
 
 ## Тестирование
-
+Запустите приложение.
 Запустите команду вызова curl'ов через Makefile:
 ```bash
 make run_curl_tests
