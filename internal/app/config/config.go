@@ -3,15 +3,27 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type Config struct {
-	RestPort string
+	RestPort        string
+	ShutdownTimeout int
 }
 
 func MustLoad() *Config {
+	shutdownTimeout, err := strconv.Atoi(getVariableByEnv("SHUTDOWN_TIMEOUT"))
+	if err != nil {
+		panic("shutdown timeout variable must be integer")
+	}
 	conf := &Config{
-		RestPort: getVariableByEnv("REST_PORT"),
+		RestPort:        getVariableByEnv("REST_PORT"),
+		ShutdownTimeout: shutdownTimeout,
+	}
+	// если забыли указать :
+	if !strings.HasPrefix(conf.RestPort, ":") {
+		conf.RestPort = ":" + conf.RestPort
 	}
 	fmt.Println("brandscout_tt app successfully configured")
 	return conf
