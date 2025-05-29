@@ -1,8 +1,8 @@
 package config
 
 import (
-	"fmt"
 	"os"
+	"quotes_api/internal/logging"
 	"strconv"
 	"strings"
 )
@@ -25,7 +25,7 @@ func MustLoad() *Config {
 	if !strings.HasPrefix(conf.RestPort, ":") {
 		conf.RestPort = ":" + conf.RestPort
 	}
-	fmt.Println("brandscout_tt app successfully configured")
+	logging.Logger.Info("brandscout_tt app successfully configured")
 	return conf
 }
 

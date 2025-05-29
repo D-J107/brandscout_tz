@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"quotes_api/internal/app/domain/models"
 	"quotes_api/internal/app/services"
+	"quotes_api/internal/logging"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -49,6 +50,7 @@ func (c *QuoteController) GetByFilter(w http.ResponseWriter, r *http.Request) {
 		quotes, err = c.qs.GetAll()
 		if err != nil {
 			WriteErrorResponse(w, http.StatusInternalServerError, "failed to get quotes, "+err.Error())
+			logging.Logger.Error("QuoteController.GetByFilter() internal", "error", err)
 			return
 		}
 	} else {
@@ -56,6 +58,7 @@ func (c *QuoteController) GetByFilter(w http.ResponseWriter, r *http.Request) {
 		quotes, err = c.qs.GetByAuthor(author)
 		if err != nil {
 			WriteErrorResponse(w, http.StatusInternalServerError, err.Error())
+			logging.Logger.Error("QuoteController.GetByFilter() internal", "error", err)
 			return
 		}
 	}

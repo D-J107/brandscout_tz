@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os/signal"
 	"quotes_api/internal/app/config"
+	"quotes_api/internal/logging"
 	"syscall"
 	"time"
 )
@@ -20,9 +21,9 @@ func RunServer() {
 	}
 
 	go func() {
-		fmt.Println("REST API running on " + cfg.RestPort)
+		logging.Logger.Info("REST API running on " + cfg.RestPort)
 		if err := srv.ListenAndServe(); err != nil {
-			fmt.Println("REST API quotes server error: ", err.Error())
+			logging.Logger.Error("Quotes REST error", "error", err)
 		}
 	}()
 
@@ -36,7 +37,8 @@ func RunServer() {
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		fmt.Printf("Shutdown with error: %v", err)
+		logging.Logger.Error("Shutdown error", "error", err)
+	} else {
+		logging.Logger.Info("Shutdown complete...")
 	}
-	fmt.Println("Shutdown complete...")
 }
